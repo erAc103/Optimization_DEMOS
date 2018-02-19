@@ -5,7 +5,10 @@ import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 from scipy.optimize import minimize
 
-''' TODO: Fix the Rosenbrock equation for all examples...'''
+''' 
+TODO: Fix the Rosenbrock equation for all examples...
+TODO: Move functions to appropriate py files
+'''
 
 def demo1(): # 2-5-2018
 
