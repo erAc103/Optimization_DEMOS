@@ -5,6 +5,7 @@ from matplotlib.animation import FuncAnimation
 import matplotlib.pyplot as plt
 import numpy as np
 import math
+import time
 
 ''' Various line search methods discussed in chapter 7 '''
 def goldSearchExample(initialRange, accuracy, printIter=False, graph=False):
@@ -37,7 +38,7 @@ def goldSearchExample(initialRange, accuracy, printIter=False, graph=False):
 
     while accuracy < abs(b - a):
         a1 = a + rho * (b - a)
-        b1 = b - rho * (b - a)
+        b1 = a + ((1 - rho) * (b - a))
 
         f1 = func(a1)
         f2 = func(b1)
@@ -58,22 +59,28 @@ def goldSearchExample(initialRange, accuracy, printIter=False, graph=False):
     def graphFunc():
 
         fig = plt.figure()
-        t1 = np.linspace(-0.5, 7)
+        plt.xlim(-0.5, 7)
+        plt.ylim(-25, 50)
 
+        x = np.array(iterationOutput).ravel().tolist()
+
+        x1 = x[0::2]
+        x2 = x[1::2]
+
+        graph, = plt.plot([], [], 'o', color='red')
+
+        def animate(i):
+            graph.set_data([x1[i], x2[i]], [func(np.array(x1[i])), func(np.array(x2[i]))])
+            return graph
+
+        t1 = np.linspace(-0.5, 7)
         plt.plot(t1, func(t1))
 
-        # plot points at initial range
-        plt.scatter(start1, func(start1), color='lime')
-        plt.scatter(start2, func(start2), color='lime')
-
-        # plot points at final range
-        plt.scatter(a, func(a), color='red')
-        plt.scatter(b, func(b), color='red')
-
+        ani = FuncAnimation(fig, animate, frames=len(x1)-1, interval=500)
         plt.show()
 
     if printIter:
-        printIterations(iterationOutput)
+        printIterations()
     if graph:
         graphFunc()
 
@@ -129,7 +136,7 @@ def fibSearchExample(initialRange, accuracy, printIter=False, graph=False):     
         rho = 1 - (fibNum(N+1)/fibNum(N+2))
 
         a1 = a + rho*(b-a)
-        b1 = a + (1 - rho)*(b - a)
+        b1 = a + (1 - rho) *(b - a)
 
         f1 = func(a1)
         f2 = func(b1)
@@ -149,20 +156,25 @@ def fibSearchExample(initialRange, accuracy, printIter=False, graph=False):     
             count += 1
 
     def graphFunc():
-        plt.figure()
-        t1 = np.linspace(-0.5, 7.25)
+        fig = plt.figure()
+        plt.xlim(-0.5, 7)
+        plt.ylim(-25, 50)
 
-        # plot the function
+        x = np.array(iterationOutput).ravel().tolist()
+
+        x1 = x[0::2]
+        x2 = x[1::2]
+
+        graph, = plt.plot([], [], 'o', color='red')
+
+        def animate(i):
+            graph.set_data([x1[i], x2[i]], [func(np.array(x1[i])), func(np.array(x2[i]))])
+            return graph
+
+        t1 = np.linspace(-0.5, 7)
         plt.plot(t1, func(t1))
 
-        # plot points at initial range
-        plt.scatter(start1, func(start1), color='lime')
-        plt.scatter(start2, func(start2), color='lime')
-
-        # plot points at final range
-        plt.scatter(a, func(a), color='red')
-        plt.scatter(b, func(b), color='red')
-
+        ani = FuncAnimation(fig, animate, frames=len(x1) - 1, interval=500)
         plt.show()
 
     if printIter:
@@ -214,18 +226,24 @@ def newtonsMethodExample(x0, accuracy, printIter=False, graph=False):
             count += 1
 
     def graphFunc():
-        plt.figure()
-        t1 = np.linspace(-3, 3)
+        fig = plt.figure()
+        plt.xlim(-10, 10)
+        plt.ylim(-1, 20)
 
-        # plot the function
+
+        x = [i[0] for i in iterationOutput]
+        y = [i[1] for i in iterationOutput]
+
+        graph, = plt.plot([], [], 'o', color='red')
+
+        def animate(i):
+            graph.set_data(x[i], y[i])
+            return graph
+
+        t1 = np.linspace(-10, 10)
         plt.plot(t1, func(t1))
 
-        # plot start point
-        plt.scatter(x0, func(x0), color='lime')
-
-        # plot final point
-        plt.scatter(x, func(x), color='red')
-
+        ani = FuncAnimation(fig, animate, frames=len(x) - 1, interval=500, repeat=False)
         plt.show()
 
     if printIter:
@@ -356,5 +374,6 @@ def secantMethodExample2(a, b, accuracy, printIter=False, graph=False):
 ########################################################################################################################
 ''' Run code down here '''
 
-secantMethodExample2(20, 19, .0001, True, True)
+
+newtonsMethodExample(-4, .00001, True, True)
 
