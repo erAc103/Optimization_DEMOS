@@ -4,7 +4,7 @@ matplotlib.use('TkAgg')
 from matplotlib.animation import FuncAnimation
 import matplotlib.pyplot as plt
 import numpy as np
-import time
+import math
 
 ''' Various line search methods discussed in chapter 7 '''
 def goldSearchExample(initialRange, accuracy, printIter=False, graph=False):
@@ -146,7 +146,7 @@ def fibSearchExample(initialRange, accuracy, printIter=False, graph=False):     
         count = 0
         for x in iterationOutput:
             print('Iteration #', count, x)
-            count +=1
+            count += 1
 
     def graphFunc():
         plt.figure()
@@ -173,7 +173,188 @@ def fibSearchExample(initialRange, accuracy, printIter=False, graph=False):     
     return [a, b]
 
 
+def newtonsMethodExample(x0, accuracy, printIter=False, graph=False):
+    """ Secant Method - example from class - Example 7.3, Page 103
+    :param x0: starting point
+    :param accuracy: accuracy of minimum point
+    :param printIter: do you want each iteration output printed to the console?
+    :param graph: do you want the function graphed?
+    :return: [x, func(x)] minimum point
+    """
+
+    # objective function
+    def func(x):
+        return 0.5*(x**2) - np.sin(x)
+
+    # objective function 1st derivative
+    def dfunc1(x):
+        return x - np.cos(x)
+
+    # objective function 2nd derivative
+    def dfunc2(x):
+        return 1 + np.sin(x)
+
+    # retrieves next potential x value
+    def nextX(x):
+        return x - (dfunc1(x)/dfunc2(x))
+
+    x = x0
+
+    iterationOutput = [[x0, func(x0)]]
+
+    while abs(nextX(x) - x) > accuracy:
+        x = nextX(x)
+        iterationOutput.append([x, func(x)])
+
+
+    def printIterations(iterationOutput):
+        count = 0
+        for x in iterationOutput:
+            print('Iteration #', count, x)
+            count += 1
+
+    def graphFunc():
+        plt.figure()
+        t1 = np.linspace(-3, 3)
+
+        # plot the function
+        plt.plot(t1, func(t1))
+
+        # plot start point
+        plt.scatter(x0, func(x0), color='lime')
+
+        # plot final point
+        plt.scatter(x, func(x), color='red')
+
+        plt.show()
+
+    if printIter:
+        printIterations(iterationOutput)
+    if graph:
+        graphFunc()
+
+    return [x, func(x)]
+
+
+def secantMethodExample1(a, b, accuracy, printIter=False, graph=False):
+    """ Secant Method - Example 7.4, page 103 - Minimizing
+    :param a: first x value
+    :param b: second x value - keep them close
+    :param printIter: do you want each iteration printed to the console
+    :param graph: do you want the function graphed?
+    :return: [x, func(x0]
+    """
+    def func(x):
+        return 0.5*(x**2) - np.sin(x)
+
+    def dfunc1(x):
+        return x - math.cos(x)
+
+    def nextX(xk, xk1):         # xk = x^k          xk1 = x^(k-1)
+        return xk - dfunc1(xk)*((xk - xk1)/(dfunc1(xk) - dfunc1(xk1)))
+
+    x1 = a
+    x2 = b
+
+    iterationOutput = [[x1, func(x1)], [x2, func(x2)]]
+
+    while abs(x2-x1) > accuracy:
+
+        xNext = nextX(x2, x1)
+
+        x1 = x2
+        x2 = xNext
+
+        iterationOutput.append([x2, func(x2)])
+
+    def printIterations(iterationOutput):
+        count = 0
+        for x in iterationOutput:
+            print('Iteration #', count, x)
+            count += 1
+
+    def graphFunc():
+        plt.figure()
+        t1 = np.linspace(0, 21)
+
+        # plot the function
+        plt.plot(t1, func(t1))
+
+        # plot start point
+        plt.scatter(a, func(a), color='darkgreen')
+        plt.scatter(b, func(b), color='g')
+
+        # plot final point
+        plt.scatter(x2, func(x2), color='red')
+
+        plt.show()
+
+    if printIter:
+        printIterations(iterationOutput)
+    if graph:
+        graphFunc()
+
+    return [x2, func(x2)]
+
+
+def secantMethodExample2(a, b, accuracy, printIter=False, graph=False):
+    """ Secant Method - Example 7.4, page 103 - Root Finding
+    :param a: first x value
+    :param b: second x value - keep them close
+    :param printIter: do you want each iteration printed to the console
+    :param graph: do you want the function graphed?
+    :return: [x, func(x0]
+    """
+
+    def func(x):
+        return x**3 - 12.2*(x**2) + 7.45*x + 42
+
+    def nextX(xk, xk1):          # xk = x^k          xk1 = x^(k-1)
+        return xk - func(xk)*((xk - xk1)/(func(xk)-func(xk1)))
+
+    x1 = a
+    x2 = b
+
+    iterationOutput = [[x1, func(x2)], [x2, func(x2)]]
+
+    while abs(x2-x1) > accuracy:
+
+        xNext = nextX(x2, x1)
+
+        x1 = x2
+        x2 = xNext
+
+        iterationOutput.append([x2, func(x2)])
+
+    def printIterations(iterationOutput):
+        count = 0
+        for x in iterationOutput:
+            print('Iteration #', count, x)
+            count += 1
+
+    def graphFunc():
+        plt.figure()
+        t1 = np.linspace(-5, 20.5)
+
+        # plot the objective function
+        plt.plot(t1, func(t1))
+        plt.plot(t1, t1*0)      # x-axis
+
+        plt.scatter(a, func(a), color='darkgreen')  # start points
+        plt.scatter(b, func(b), color='g')          # start points
+        plt.scatter(x2, func(x2), color='red')      # end point
+
+
+        plt.show()
+
+    if printIter:
+        printIterations(iterationOutput)
+    if graph:
+        graphFunc()
+
+    return [x2, func(x2)]
 ########################################################################################################################
 ''' Run code down here '''
 
+secantMethodExample2(20, 19, .0001, True, True)
 

@@ -431,5 +431,4 @@ def sincPlot3D():
 
 #######################################################
 
-sincPlot3D()
-sincPlot3D()
+secantMethodExample2()
