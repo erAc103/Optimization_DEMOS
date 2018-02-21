@@ -8,11 +8,11 @@ import numpy as np
 ''' Various gradient methods discussed in class, in chapter 8 '''
 
 
-def gradDescentConstantStep(initialPoint, accuracy, stepsize=0.05, printIter=False, graph=False):
+def gradDescentConstantStep(initialPoint=[4.5, 5.5], accuracy=.001, stepsize=0.05, printIter=False, graph=True):
     """ Gradient Descent with constant step size - An example done in class
     :param initialPoint: [x, y] starting point
     :param accuracy: accuracy of final local minimum point
-    :param stepsize:
+    :param stepsize: points shift by stepsize*gradient
     :param printIter: do you want each iteration printed?
     :param graph: do you want it graphed?
     :return: [a, b, func(x,y)] final minimum point
@@ -71,9 +71,7 @@ def gradDescentConstantStep(initialPoint, accuracy, stepsize=0.05, printIter=Fal
     if graph:
         graphFunc()
 
-    return xP, func(xP)
+    return [xP[0], xP[1], func(xP)]
 ########################################################################################################################
 
-
-gradDescentConstantStep([4.5, 5.5], .001, printIter=True, graph=True)
 
