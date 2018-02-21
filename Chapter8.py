@@ -79,14 +79,14 @@ def gradDescentConstantStep(initialPoint=[4.5, 5.5], accuracy=.6, stepsize=0.5, 
     return [xP[0], xP[1], func(xP)]
 
 
-def gradDescent1(initialPoint=[4.5, 5], alpha=.05, accuracy=0.05, printiter=False, graph=True):
+def gradDescent1(initialPoint=[4.5, 5], alpha=.05, accuracy=0.4, printiter=False, graph=True):
     """
-    :param initialPoint:
-    :param alpha:
-    :param accuracy:
-    :param printiter:
-    :param graph:
-    :return:
+    :param initialPoint: what it sounds like
+    :param alpha: sets constant alpha value
+    :param accuracy: stops when gradient magnitude gets below this number
+    :param printiter: do you want each iteration printed
+    :param graph: do you want it graphed
+    :return: [x, y, func(x,y)]
     """
 
     def func(x):
@@ -145,7 +145,6 @@ def gradDescent1(initialPoint=[4.5, 5], alpha=.05, accuracy=0.05, printiter=Fals
         graphFunc()
 
     return [xP[0], xP[1], func(xP)]
-
 
 
 ########################################################################################################################
