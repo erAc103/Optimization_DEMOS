@@ -10,6 +10,7 @@ TODO: Fix the Rosenbrock equation for all examples...
 TODO: Move functions to appropriate py files
 '''
 
+
 def demo1(): # 2-5-2018
 
     A = np.array([[2, -1, 0], [-1, 2, -1], [0, -1, 2]])
@@ -429,6 +430,15 @@ def sincPlot3D():
 
     plotSinc()
 
+
+def simple1():  # just a quick thing tossed up in class
+
+    def func(x):
+        return np.cos(x)
+
+    sol = minimize(func, 0)
+
+    return sol
 #######################################################
 
-secantMethodExample2()
+print(simple1())
