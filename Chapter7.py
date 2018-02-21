@@ -336,6 +336,9 @@ def secantMethodExample2(a, b, accuracy, printIter=False, graph=False):
     def nextX(xk, xk1):          # xk = x^k          xk1 = x^(k-1)
         return xk - func(xk)*((xk - xk1)/(func(xk)-func(xk1)))
 
+    def xAxis(x):                 # For demonstrating 0 line
+        return 0 * x
+
     x1 = a
     x2 = b
 
@@ -357,18 +360,24 @@ def secantMethodExample2(a, b, accuracy, printIter=False, graph=False):
             count += 1
 
     def graphFunc():
-        plt.figure()
-        t1 = np.linspace(-5, 20.5)
+        fig = plt.figure()
+        plt.xlim(-3.45, 14)
+        plt.ylim(-5, 5)
 
-        # plot the objective function
+        pts = np.array(iterationOutput).ravel().tolist()
+        x = pts[0::2]
+        y = pts[1::2]
+
+        graph, = plt.plot([], [], 'o', color = 'red')
+
+        def animate(i):
+            graph.set_data(x[i], y[i])
+            return graph
+
+        t1 = np.linspace(-10, 14)
         plt.plot(t1, func(t1))
-        plt.plot(t1, t1*0)      # x-axis
-
-        plt.scatter(a, func(a), color='darkgreen')  # start points
-        plt.scatter(b, func(b), color='g')          # start points
-        plt.scatter(x2, func(x2), color='red')      # end point
-
-
+        plt.plot(t1, xAxis(t1))
+        ani = FuncAnimation(fig, animate, frames = len(x) - 1, interval=500, repeat = True)
         plt.show()
 
     if printIter:
@@ -380,5 +389,5 @@ def secantMethodExample2(a, b, accuracy, printIter=False, graph=False):
 ########################################################################################################################
 ''' Run code down here '''
 
-secantMethodExample1(6, 5, .0001, True, True)
+secantMethodExample2(6, 5, .0001, True, True)
 
