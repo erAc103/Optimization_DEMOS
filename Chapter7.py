@@ -388,5 +388,5 @@ def secantMethodExample2(a=1, b=1.1, accuracy=.001, printIter=False, graph=True)
 
     return [x2, func(x2)]
 ########################################################################################################################
-''' Run code down here '''
+
 

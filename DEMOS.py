@@ -441,4 +441,3 @@ def simple1():  # just a quick thing tossed up in class
     return sol
 #######################################################
 
-print(simple1())
