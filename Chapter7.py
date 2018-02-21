@@ -297,9 +297,9 @@ def secantMethodExample1(a, b, accuracy, printIter=False, graph=False):
         plt.xlim(-10, 10)
         plt.ylim(-1,20)
 
-        x = np.array(iterationOutput).ravel().tolist()
-        x = x[0::2]
-        y = x[1::2]
+        pts = np.array(iterationOutput).ravel().tolist()
+        x = pts[0::2]
+        y = pts[1::2]
 
         graph, = plt.plot([], [], 'o', color = 'red')
 
@@ -310,7 +310,7 @@ def secantMethodExample1(a, b, accuracy, printIter=False, graph=False):
         t1 = np.linspace(-10, 10)
         plt.plot(t1, func(t1))
 
-        ani = FuncAnimation(fig, animate, frames = len(x) - 1, interval=500, repeat = False)
+        ani = FuncAnimation(fig, animate, frames=len(x) - 1, interval=500, repeat=True)
         plt.show()
 
     if printIter:
@@ -380,5 +380,5 @@ def secantMethodExample2(a, b, accuracy, printIter=False, graph=False):
 ########################################################################################################################
 ''' Run code down here '''
 
-secantMethodExample2(-10, 10, .00001, True, True)
+secantMethodExample1(6, 5, .0001, True, True)
 
