@@ -13,8 +13,8 @@ def goldSearchExample(initialRange, accuracy, printIter=False, graph=False):
     """ Golden Search - Example 7.1, page 94
     :param initialRange: [min, max]
     :param accuracy: accuracy of final interval
-    :param printIter:
-    :param graph:
+    :param printIter: do you want to print each iteration to the console?
+    :param graph: do you want to graph the function?
     :return: [a, b] a minimum value from the initial range lies within this range
     """
     def func(x):
