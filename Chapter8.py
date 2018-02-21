@@ -1,9 +1,9 @@
 import matplotlib
 matplotlib.use('TkAgg')
-
 from matplotlib.animation import FuncAnimation
 import matplotlib.pyplot as plt
 import numpy as np
+
 
 ''' Various gradient methods discussed in class, in chapter 8 '''
 
@@ -11,12 +11,13 @@ import numpy as np
 def gradDescentConstantStep(initialPoint=[4.5, 5.5], accuracy=.6, stepsize=0.5, printIter=False, graph=True):
     """ Gradient Descent with constant step size - An example done in class
     :param initialPoint: [x, y] starting point
-    :param accuracy: accuracy of final local minimum point
+    :param accuracy: Stops when distance between current and previous point is less than accuracy
     :param stepsize: points shift by stepsize*gradient
     :param printIter: do you want each iteration printed?
     :param graph: do you want it graphed?
     :return: [a, b, func(x,y)] final minimum point
     """
+
     if accuracy < stepsize:
         return None
 
@@ -26,8 +27,10 @@ def gradDescentConstantStep(initialPoint=[4.5, 5.5], accuracy=.6, stepsize=0.5, 
     def gradFunc(x):
         return [8*x[0], 2*x[1]]
 
+
     iterationOutput = [initialPoint]
     xP = initialPoint
+
 
     while np.linalg.norm(np.array(gradFunc(xP))) > accuracy:  # when magnitude of gradient is < accuracy... stop
         gradNorm = np.array(gradFunc(xP))/np.linalg.norm(np.array(gradFunc(xP)))
@@ -35,6 +38,7 @@ def gradDescentConstantStep(initialPoint=[4.5, 5.5], accuracy=.6, stepsize=0.5, 
         xP = xP - stepsize * gradNorm
 
         iterationOutput.append(xP)
+
 
     def printIterations():
         count = 0
@@ -70,6 +74,7 @@ def gradDescentConstantStep(initialPoint=[4.5, 5.5], accuracy=.6, stepsize=0.5, 
         # ani.save('gradDescentConstantStep.gif', dpi=80, writer='imagemagick')
 
         plt.show()
+
 
     if printIter:
         printIterations()
@@ -146,8 +151,3 @@ def gradDescent1(initialPoint=[4.5, 5], alpha=.05, accuracy=0.4, printiter=False
 
     return [xP[0], xP[1], func(xP)]
 
-
-########################################################################################################################
-
-
-gradDescent1()
