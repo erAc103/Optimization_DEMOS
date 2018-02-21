@@ -293,19 +293,24 @@ def secantMethodExample1(a, b, accuracy, printIter=False, graph=False):
             count += 1
 
     def graphFunc():
-        plt.figure()
-        t1 = np.linspace(0, 21)
+        fig = plt.figure()
+        plt.xlim(-10, 10)
+        plt.ylim(-1,20)
 
-        # plot the function
+        x = np.array(iterationOutput).ravel().tolist()
+        x = x[0::2]
+        y = x[1::2]
+
+        graph, = plt.plot([], [], 'o', color = 'red')
+
+        def animate(i):
+            graph.set_data(x[i], y[i])
+            return graph
+
+        t1 = np.linspace(-10, 10)
         plt.plot(t1, func(t1))
 
-        # plot start point
-        plt.scatter(a, func(a), color='darkgreen')
-        plt.scatter(b, func(b), color='g')
-
-        # plot final point
-        plt.scatter(x2, func(x2), color='red')
-
+        ani = FuncAnimation(fig, animate, frames = len(x) - 1, interval=500, repeat = False)
         plt.show()
 
     if printIter:
@@ -375,6 +380,5 @@ def secantMethodExample2(a, b, accuracy, printIter=False, graph=False):
 ########################################################################################################################
 ''' Run code down here '''
 
-
-newtonsMethodExample(-4, .00001, True, True)
+secantMethodExample2(-10, 10, .00001, True, True)
 
