@@ -4,10 +4,11 @@ matplotlib.use('TkAgg')
 from matplotlib.animation import FuncAnimation
 import matplotlib.pyplot as plt
 import numpy as np
-import math
-import time
+
 
 ''' Various line search methods discussed in chapter 7 '''
+
+
 def goldSearchExample(initialRange, accuracy, printIter=False, graph=False):
     """ Golden Search - Example 7.1, page 94
     :param initialRange: [min, max]
@@ -266,7 +267,7 @@ def secantMethodExample1(a, b, accuracy, printIter=False, graph=False):
         return 0.5*(x**2) - np.sin(x)
 
     def dfunc1(x):
-        return x - math.cos(x)
+        return x - np.cos(x)
 
     def nextX(xk, xk1):         # xk = x^k          xk1 = x^(k-1)
         return xk - dfunc1(xk)*((xk - xk1)/(dfunc1(xk) - dfunc1(xk1)))
