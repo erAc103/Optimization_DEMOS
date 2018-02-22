@@ -259,6 +259,7 @@ def secantMethodExample1(a, b, accuracy, printIter=False, graph=False):
     """ Secant Method - Example 7.4, page 103 - Minimizing
     :param a: first x value
     :param b: second x value - keep them close
+    :param accuracy: how accurate do you want your result?
     :param printIter: do you want each iteration printed to the console
     :param graph: do you want the function graphed?
     :return: [x, func(x0]
@@ -321,7 +322,7 @@ def secantMethodExample1(a, b, accuracy, printIter=False, graph=False):
     return [x2, func(x2)]
 
 
-def secantMethodExample2(a, b, accuracy, printIter=False, graph=False):
+def secantMethodExample2(a=1, b=1.1, accuracy=.001, printIter=False, graph=True):
     """ Secant Method - Example 7.4, page 103 - Root Finding
     :param a: first x value
     :param b: second x value - keep them close
@@ -362,7 +363,7 @@ def secantMethodExample2(a, b, accuracy, printIter=False, graph=False):
     def graphFunc():
         fig = plt.figure()
         plt.xlim(-3.45, 14)
-        plt.ylim(-5, 5)
+        plt.ylim(-50, 40)
 
         pts = np.array(iterationOutput).ravel().tolist()
         x = pts[0::2]
@@ -388,6 +389,4 @@ def secantMethodExample2(a, b, accuracy, printIter=False, graph=False):
     return [x2, func(x2)]
 ########################################################################################################################
 ''' Run code down here '''
-
-secantMethodExample2(6, 5, .0001, True, True)
 
