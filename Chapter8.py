@@ -1,5 +1,6 @@
 import matplotlib
 matplotlib.use('TkAgg')
+from scipy import optimize as opt
 from matplotlib.animation import FuncAnimation
 import matplotlib.pyplot as plt
 import numpy as np
@@ -174,15 +175,17 @@ def gradDescent2(initialPoint=[4.5, 5], accuracy=0.01, printiter=False, graph=Tr
         return [8*x[0], 2*x[1]]
 
     def lineFunc(x, grad, t):
-        return np.array(x) - t*np.array(grad)
+
+        return np.array(x) - (t * grad)
 
     def goldSearch(x, grad):
-        a0 = -.0001
+        a0 = 0
         b0 = 10
         rho = 0.382  # 1 - golden ratio
-        while abs(a0 - b0) > 0.001:  # maybe change from 0.01??
+
+        while abs(a0 - b0) > 0.00001:
             a1 = a0 + rho * (b0 - a0)
-            b1 = b0 - rho * (b0 - a0)
+            b1 = a0 + ((1-rho) * (b0 - a0))
 
             at = lineFunc(x, grad, a1)
             bt = lineFunc(x, grad, b1)
@@ -203,7 +206,7 @@ def gradDescent2(initialPoint=[4.5, 5], accuracy=0.01, printiter=False, graph=Tr
 
     while True:
 
-        xNext = goldSearch(xP, gradFunc(xP))
+        xNext = goldSearch(xP, np.array(gradFunc(xP)))
 
         if abs(np.linalg.norm(np.array(xNext) - np.array(xP))) < accuracy:
             xP = xNext
@@ -302,6 +305,81 @@ def gradDescent3(initialPoint=[4.5, 5], accuracy=0.001, printiter=False, graph=T
     while True:
 
         xNext = goldSearch(xP, gradFunc(xP))
+
+        if abs(np.linalg.norm(np.array(xNext) - np.array(xP))) < accuracy:
+            xP = xNext
+            iterationOutput.append(xP)
+            break
+
+        xP = xNext
+        iterationOutput.append(xP)
+
+    def printIterations():
+        count = 0
+        for x in iterationOutput:
+            print('Iteration #', count, x)
+            count += 1
+
+    def graphFunc():
+        fig = plt.figure()
+        plt.xlim(-6, 6)
+        plt.ylim(-6, 6)
+
+        pts = np.array(iterationOutput).ravel().tolist()
+
+        x = pts[0::2]
+        y = pts[1::2]
+
+        graph, = plt.plot([], [], '-o')
+
+        def animate(i):
+            graph.set_data(x[:i + 1], y[:i + 1])  # use this to keep points on the plot
+            return graph
+
+        t = np.linspace(-6, 6, 100)
+        X, Y = np.meshgrid(t, t)
+        Z = func([X, Y])
+
+        plt.contour(X, Y, Z, 25, cmap='gist_ncar')
+
+        ani = FuncAnimation(fig, animate, frames=len(x) - 1, interval=300)
+
+        # you need imagemagick for this - it saves as gif
+        # ani.save('gradDescentConstantStep.gif', dpi=80, writer='imagemagick')
+
+        plt.show()
+
+    if printiter:
+        printIterations()
+    if graph:
+        graphFunc()
+
+    return [xP[0], xP[1], func(xP)]
+
+
+def gradDescent4(initialPoint=[4.5, 5], accuracy=0.01, printiter=False, graph=True):
+    """ This is the same as gradDescent2 with one exception. It does not implement the golden search.
+    Instead it uses scipy line_search
+    :param initialPoint: [x,y] starting point
+    :param accuracy: stops when distance between two points is less than this number
+    :param printiter: prints each iteration
+    :param graph: graphs function
+    :return: [x, y, f(x,y)]
+    """
+
+    def func(x):
+        return 4*(x[0]**2) + x[1]**2
+
+    def gradFunc(x):
+        return [8*x[0], 2*x[1]]
+
+    iterationOutput = [initialPoint]
+    xP = np.array(initialPoint)
+
+    while True:
+        alpha = opt.line_search(func, gradFunc, np.array(initialPoint), -1 * np.array(gradFunc(initialPoint)))[0]
+
+        xNext = xP - alpha * np.array(gradFunc(xP))
 
         if abs(np.linalg.norm(np.array(xNext) - np.array(xP))) < accuracy:
             xP = xNext
