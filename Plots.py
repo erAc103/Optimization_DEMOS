@@ -96,3 +96,27 @@ def bealeGraph():
         plt.show()
 
     plotBeale()
+
+
+def peaksGraph(): # fuck you MATLAB I found your "peaks" function
+
+    def func(x):
+        return 3*((1-x[0])**2)*np.exp(-1*(x[0]**2) - (x[1]+1)**2) - 10*((x[0]/5) - x[0]**3 - x[1]**5)\
+               * np.exp(-1*x[0]**2-x[1]**2) - (np.exp(-1*(x[0]+1)**2 - x[1]**2)/3)
+
+    def plotPeaks():
+        fig = plt.figure()
+
+        x = np.linspace(-4, 4, 50)
+        y = np.linspace(-4, 4, 50)
+        X, Y = np.meshgrid(x, y)
+
+        Z = func([X, Y])
+
+        ax = plt.axes(projection='3d')
+
+        ax.plot_surface(X, Y, Z, cmap='gist_ncar', lw=.5, rstride=1, cstride=1)
+
+        plt.show()
+
+    plotPeaks()
