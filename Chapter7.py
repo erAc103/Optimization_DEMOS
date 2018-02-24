@@ -24,10 +24,6 @@ def goldSearchExample(initialRange, accuracy, printIter=False, graph=False):
         print('Fix initial range input')
         return
 
-    # used for plotting at the end
-    start1 = initialRange[0]
-    start2 = initialRange[1]
-
     # changes each iteration
     a = initialRange[0]
     b = initialRange[1]
@@ -111,10 +107,6 @@ def fibSearchExample(initialRange, accuracy, printIter=False, graph=False):     
     if initialRange[0] >= initialRange[1]:
         print('Fix initial range input')
         return
-
-    # used for plotting at the end
-    start1 = initialRange[0]
-    start2 = initialRange[1]
 
     # changes each iteration
     a = initialRange[0]
@@ -387,6 +379,3 @@ def secantMethodExample2(a=1, b=1.1, accuracy=.001, printIter=False, graph=True)
         graphFunc()
 
     return [x2, func(x2)]
-########################################################################################################################
-''' Run code down here '''
-
