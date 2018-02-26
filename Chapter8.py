@@ -430,3 +430,18 @@ def gradDescent4(initialPoint=[4.5, 5], accuracy=0.01, printiter=False, graph=Tr
         graphFunc()
 
     return [xP[0], xP[1], func(xP)]
+
+
+def min1():
+
+    def func(x):
+        return 3*x[0]**2 + 2*x[0]*x[1] + x[1]**2 - x[0] - x[1]
+
+    sol = opt.minimize(func, [5, 5])
+
+    print(sol)
+
+
+def matLeftDivide(A, b):
+    return np.linalg.solve(A.T.dot(A), A.T.dot(b))
+
