@@ -54,8 +54,8 @@ def example1(x0=[3,-1,0,1], iterations=3, printiter=True):
 
     print(func(x))
 
-
-def linRegression(points=[[1,2], [2,1], [3,3], [4,3], [5,6], [4,6], [2,0.75]]):
+'''
+def linRegression(points=[[1,2], [2,1]):
 
     beta = np.random.randn(1,2)
 
@@ -89,3 +89,88 @@ def linRegression(points=[[1,2], [2,1], [3,3], [4,3], [5,6], [4,6], [2,0.75]]):
     plt.plot(x,y, 'o')
     plt.show()
 
+'''
+def linRegression1(degree= '1'):
+
+    def deg1():
+
+        beta = np.random.randn(1, 2)
+
+        def func(x):
+            return 1 + 0.75*x
+
+        def funcData(x):
+            return 1 + 0.75*x + np.random.normal(0, 0.3)
+
+        def fit(x, b):
+            return b[0] + b[1]*x
+
+        def cost(b):
+            J = 0.5 * np.sum((y - fit(x)) ** 2)
+            return J
+
+
+
+    def deg2():
+
+        beta = np.random.randn(1, 3)
+
+        def func(x):
+            return 5 + 0.4*x - x**2
+
+        def funcData(x):
+            return 5 + 0.4*x - x**2 + np.random.normal(0, 0.3)
+
+        def fit(x):
+            return beta[0] + beta[1]*x + beta[2]*x**2
+
+        def cost(b):
+            J = 0.5 * np.sum((y - func(x)) ** 2)
+            return J
+
+
+    def deg3():
+
+        beta = np.random.randn(1, 4)
+
+        def func(x): # y
+            return .5 + 0.5*x - 2*x**2 + 1.1*x**3
+
+        def funcData(x): # produces y data with some error
+            return .5 + 0.5*x - 2*x**2 + 1.1*x**3 + np.random.normal(0, 3)
+
+        def fit(x, b): # yHat
+            return b[0] + b[1]*x + b[2]*x**2 + b[3]*x**3
+
+        x = np.linspace(0, 4, 20)
+        y = funcData(x)
+        ystuff = func(x)
+
+        print(y)
+        print(ystuff)
+
+        def cost(b):
+            J = 0.5 * np.sum((y - fit(x, b)) ** 2)
+            return J
+
+        sol = opt.minimize(cost, beta)
+
+        print(sol)
+        beta = np.array([sol.x[0], sol.x[1], sol.x[2], sol.x[3]])
+
+        fig = plt.figure()
+        plt.xlim(0, 4)
+
+        xspace = np.linspace(0, 4)
+        plt.plot(xspace, fit(xspace, beta))
+        plt.plot(x, y, 'o')
+        plt.show()
+
+    if degree == '1':
+        deg1()
+    elif degree == '2':
+        deg2()
+    elif degree == '3':
+        deg3()
+    else:
+        print('Wrong degree number')
