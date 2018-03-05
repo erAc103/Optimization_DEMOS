@@ -55,4 +55,37 @@ def example1(x0=[3,-1,0,1], iterations=3, printiter=True):
     print(func(x))
 
 
+def linRegression(points=[[1,2], [2,1], [3,3], [4,3], [5,6], [4,6], [2,0.75]]):
+
+    beta = np.random.randn(1,2)
+
+    x = np.array([point[0] for point in points])
+    y = np.array([point[1] for point in points])
+
+    def func(x, b):
+        b = b.ravel()
+        yHat = b[0] + x*b[1]
+        return yHat
+
+    def cost(b):
+        J = 0.5 * np.sum((y-func(x, b))**2)
+        return J
+
+    def fit(x):
+        return beta[0] + x*beta[1]
+
+    sol = opt.minimize(cost, beta)
+
+    beta = np.array([sol.x[0], sol.x[1]])
+    print(beta)
+
+    fig = plt.figure()
+    plt.ylim(0,7)
+    plt.xlim(0,7)
+
+    xspace = np.linspace(0,7)
+    print(xspace)
+    plt.plot(xspace, fit(xspace))
+    plt.plot(x,y, 'o')
+    plt.show()
 
