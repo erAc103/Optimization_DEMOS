@@ -207,7 +207,7 @@ def LMexample():
     beta = np.random.randn(1, 2)
     beta = np.array([[1, 2]])
 
-    u = 1 # lambda value
+    u = 0 # lambda value
 
     def fit(x, b):
         b = np.ravel(b)
@@ -222,9 +222,8 @@ def LMexample():
     def jac(x, b):
         return np.array(jacRow(x, np.ravel(b))).T
 
-    print(beta,'\n')
     '''
-    for i in range(0,100):
+    for i in range(0,1):
 
         J = jac(x, beta)
 
@@ -239,7 +238,7 @@ def LMexample():
         grad = np.matmul(J.T, r)
 
         bOld = beta
-        bNew = np.add(bOld.T, np.matmul(metricInv, grad))
+        bNew = np.subtract(bOld.T, np.matmul(metricInv, grad))
 
         rNew = np.array([res(bNew)]).T
 
@@ -247,57 +246,57 @@ def LMexample():
         cNew = 0.5*np.matmul(rNew.T, rNew)
     '''
 
-    beta = np.array([[1, 2]])
+    beta = np.array([[20, .5]])
+    #x = np.array([1, 2, 3, 4])
+    #y = np.array([2, 4, 9, 12])
 
-    for i in range(0, 4):
+    for i in range(0, 20):
 
         try:
+            print(beta, 'beta\n')
             r = np.array([res(beta)]).T
 
-            print(r,'\n')
+            print(r,'r\n')
 
-            print(jac(x,beta), '\n')
-
+            print(jac(x,beta), 'J\n')
+            print(jac(x,beta).T, 'JT\n')
             JTJ = np.matmul(jac(x, beta).T, jac(x, beta))
 
-            print(JTJ,'\n')
+            evals = np.linalg.eigvals(JTJ)
+
+            #if min(evals) < 0:    # maybe???
+            #    u = abs(min(evals))
+
+            u = abs(min(evals))
+
+            print(JTJ,'JTJ          eigvals', evals, '\n')
 
             uI = np.add(JTJ, u*np.identity(2))
 
-            print(uI,'\n')
+            print(uI,'UI \n')
 
             inv = np.linalg.inv(uI)
 
-            print(inv, '\n')
+            print(inv, 'INV \n')
 
             Jr = np.matmul(jac(x, beta).T, r)
 
-            print(Jr,'\n')
+            print(Jr,'Jr\n')
 
             fin = np.matmul(inv, Jr)
 
-            print(fin, '\n')
+            print(fin, 'inv*Jr\n')
 
-            beta = np.subtract(beta.T, fin).T
+            beta = np.add(beta.T, fin).T    # why add?
 
-            print(beta)
+            print(beta, '(beta-fin).T\n')
 
-            print(i,'\n\n')
-
+            print(i,'##########################################\n\n')
 
         except OverflowError:
             print('Overflow at iteration ', i)
             break
-    
-    
+
     print(beta)
-
-
-
-
-
-
-
-
-
+    print(u)
 
