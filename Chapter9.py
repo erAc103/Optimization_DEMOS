@@ -54,6 +54,7 @@ def example1(x0=[3,-1,0,1], iterations=3, printiter=True):
 
     print(func(x))
 
+
 def linRegression1(degree= '1'):
 
     def deg1():
@@ -89,7 +90,6 @@ def linRegression1(degree= '1'):
         plt.plot(xspace, fit(xspace, beta))
         plt.plot(x, y, 'o')
         plt.show()
-
 
 
     def deg2():
@@ -175,6 +175,7 @@ def linRegression1(degree= '1'):
 def nonLinearRegression():
 
     x = np.array([0.9, 1.5, 13.8, 19.8, 24.1, 28.2, 35.2, 60.3, 74.6, 81.3])
+    x = 0.1*x
     y = np.array([455.2, 428.6, 124.1, 67.3, 43.2, 28.1, 13.1, -.4, -1.3, -1.5])
 
     beta = np.random.randn(1, 2)
@@ -191,7 +192,7 @@ def nonLinearRegression():
     print(sol)
     beta = np.array([sol.x[0], sol.x[1]])
 
-    xspace = np.linspace(0, 100)
+    xspace = np.linspace(0, 10)
     plt.plot(xspace, fit(xspace, beta))
     plt.plot(x, y, 'o')
     plt.show()
@@ -200,21 +201,99 @@ def nonLinearRegression():
 def LMexample():
 
     x = np.array([0.9, 1.5, 13.8, 19.8, 24.1, 28.2, 35.2, 60.3, 74.6, 81.3])
+    x = 0.1 * x
     y = np.array([455.2, 428.6, 124.1, 67.3, 43.2, 28.1, 13.1, -.4, -1.3, -1.5])
 
     beta = np.random.randn(1, 2)
+    beta = np.array([[1, 2]])
 
-    u = 1  # lambda value
-
+    u = 1 # lambda value
 
     def fit(x, b):
+        b = np.ravel(b)
         return b[0] * np.exp(x * b[1])
 
     def res(b):
         return y - fit(x, b)
 
-    def cost(b):
-        return 0.5 * np.sum(res(b) ** 2)
+    def jacRow(x, b):  # creates one row of jacobian
+        return [np.exp(x*b[1]), b[0]*x*np.exp(x*b[1])]
+
+    def jac(x, b):
+        return np.array(jacRow(x, np.ravel(b))).T
+
+    print(beta,'\n')
+    '''
+    for i in range(0,100):
+
+        J = jac(x, beta)
+
+        r = np.array([res(beta)]).T
+
+        # calculate metric
+        JTJ = np.matmul(J.T, J)
+        metric = np.add(JTJ, u * np.identity(2))
+        metricInv = np.linalg.inv(metric)
+
+        # calculate gradient
+        grad = np.matmul(J.T, r)
+
+        bOld = beta
+        bNew = np.add(bOld.T, np.matmul(metricInv, grad))
+
+        rNew = np.array([res(bNew)]).T
+
+        cOld = 0.5*np.matmul(r.T, r)
+        cNew = 0.5*np.matmul(rNew.T, rNew)
+    '''
+
+    beta = np.array([[1, 2]])
+
+    for i in range(0, 4):
+
+        try:
+            r = np.array([res(beta)]).T
+
+            print(r,'\n')
+
+            print(jac(x,beta), '\n')
+
+            JTJ = np.matmul(jac(x, beta).T, jac(x, beta))
+
+            print(JTJ,'\n')
+
+            uI = np.add(JTJ, u*np.identity(2))
+
+            print(uI,'\n')
+
+            inv = np.linalg.inv(uI)
+
+            print(inv, '\n')
+
+            Jr = np.matmul(jac(x, beta).T, r)
+
+            print(Jr,'\n')
+
+            fin = np.matmul(inv, Jr)
+
+            print(fin, '\n')
+
+            beta = np.subtract(beta.T, fin).T
+
+            print(beta)
+
+            print(i,'\n\n')
+
+
+        except OverflowError:
+            print('Overflow at iteration ', i)
+            break
+    
+    
+    print(beta)
+
+
+
 
 
 
